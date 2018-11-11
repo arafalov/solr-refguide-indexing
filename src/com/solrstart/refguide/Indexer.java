@@ -18,7 +18,7 @@ public class Indexer {
         System.out.println("Testing with: " + testFile.getName());
 
         Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-        Map<String, Object> options = options().option(Asciidoctor.STRUCTURE_MAX_LEVEL, 5).asMap();
+        Map<String, Object> options = options().asMap();
 
         Document document = asciidoctor.loadFile(testFile, options);
 
