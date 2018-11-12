@@ -82,7 +82,12 @@ public class Indexer {
             doc.addField("path", String.join(" >> ", titles));
             doc.addField("title", titles.getLast()); //for better matching
             doc.addField("level", parentNode.getLevel());
-            doc.addField("text", children);
+            if (children.size() == 0) {
+                doc.addField("hasText", false);
+            } else {
+                doc.addField("hasText", true);
+                doc.addField("text", children);
+            }
             UpdateResponse add = solrClient.add(doc);
 
         }

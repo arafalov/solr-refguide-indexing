@@ -4,6 +4,7 @@
     <field name="id" type="string" required="true" indexed="true" stored="true" />
     <field name="_text_" type="text_basic" multiValued="true" indexed="true" stored="false" docValues="false"/>
     <field name="text" type="text_basic" multiValued="true" indexed="true" stored="true"/>
+    <field name="hasText" type="boolean" indexed="true" stored="true"/>
 
     <dynamicField name="*" type="text_basic" indexed="true" stored="true"/>
 
@@ -19,4 +20,6 @@
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
+
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
 </schema>
