@@ -6,6 +6,9 @@
     <field name="text" type="text_basic" multiValued="true" indexed="true" stored="true"/>
     <field name="hasText" type="boolean" indexed="true" stored="true"/>
 
+    <field name="classnames" multiValued="true" type="text_classname" indexed="true"/>
+    <copyField source="text" dest="classnames"/>
+
     <dynamicField name="*" type="text_basic" indexed="true" stored="true"/>
 
     <copyField source="*" dest="_text_"/>
@@ -26,6 +29,28 @@
             <tokenizer class="solr.StandardTokenizerFactory"/>
             <filter class="solr.WordDelimiterGraphFilterFactory" preserveOriginal="1" generateWordParts="1"
                     generateNumberParts="0" splitOnCaseChange="1" splitOnNumerics="0"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="text_classname" class="solr.TextField" positionIncrementGap="100">
+        <analyzer type="index">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <!--
+                Use fancy negative lookahead to match CamelCase class tokens, with optional preceeding package names
+                - solr.LowerCaseFilterFactory
+                - java.util.LinkedList
+                - and without packages LinkedList
+                - but not java.util.List (too simple for our use-case)
+                And then we remove leading package names (if any), leaving only the class name itself.
+             -->
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^(?!(\w+\.)*([A-Z]\w+){2,}$).*$" replacement=""/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^(\w+\.)*" replacement=""/>
+            <filter class="solr.LengthFilterFactory" min="4" max="30"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
