@@ -15,11 +15,17 @@
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" docValues="true"/>
 
     <fieldType name="text_basic" class="solr.SortableTextField" positionIncrementGap="100">
-        <analyzer>
+        <analyzer type="index">
             <tokenizer class="solr.StandardTokenizerFactory"/>
             <filter class="solr.WordDelimiterGraphFilterFactory" preserveOriginal="1" generateWordParts="1"
                     generateNumberParts="0" splitOnCaseChange="0" splitOnNumerics="0"/>
             <filter class="solr.FlattenGraphFilterFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.WordDelimiterGraphFilterFactory" preserveOriginal="1" generateWordParts="1"
+                    generateNumberParts="0" splitOnCaseChange="1" splitOnNumerics="0"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>

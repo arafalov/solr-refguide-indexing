@@ -3,7 +3,6 @@ package com.solrstart.refguide;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.*;
@@ -19,36 +18,53 @@ public class Indexer {
 
     private static TreeSet<String> CONTEXTS = new TreeSet<>();
     private static ConcurrentUpdateSolrClient solrClient;
+    private static Asciidoctor asciidoctor;
     private static String fileName;
+    private static Map<String, Object> options = options().asMap();
 
     public static void main(String[] args) throws IOException, SolrServerException {
-        File testFile = new File(args[0]);
+        asciidoctor = Asciidoctor.Factory.create();
 
-        fileName = testFile.getName();
-        System.out.println("Testing with: " + fileName);
-
-        Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-        Map<String, Object> options = options().asMap();
-
-        Document document = asciidoctor.loadFile(testFile, options);
-
-        System.out.println(document.getDoctitle());
 
         solrClient = new ConcurrentUpdateSolrClient.Builder("http://localhost:8983/solr/refguide").build();
         solrClient.deleteByQuery("*:*");
         solrClient.commit();
 
+        int totalFilesIndexed = 0;
+
+        for (String path : args) {
+            File fileOrDir = new File(path);
+            if (fileOrDir.isDirectory()) {
+                System.out.println("Indexing directory: " + fileOrDir.getAbsolutePath());
+                for (File file : fileOrDir.listFiles((dir, name) -> name.endsWith(".adoc"))) {
+                    System.out.println("    Indexing: " + file.getAbsolutePath());
+                    indexFile(file);
+                    totalFilesIndexed++;
+                }
+            } else {
+                System.out.println("Indexing: " + fileOrDir.getAbsolutePath());
+                indexFile(fileOrDir);
+                totalFilesIndexed++;
+            }
+        }
+
+
+
+//        System.out.println("\n\n\nCONTEXTS:");
+//        System.out.println(CONTEXTS);
+        solrClient.commit();
+        solrClient.close();
+
+        System.out.println("\n\nTotal files indexed: " + totalFilesIndexed);
+    }
+
+    private static void indexFile(File file) throws IOException, SolrServerException {
+        fileName = file.getName();
+        Document document = asciidoctor.loadFile(file, options);
+
         ArrayDeque<String> titles = new ArrayDeque<>();
 
         indexStructure(document, titles);
-
-//        printStructure(document.getBlocks(), 0);
-
-
-        System.out.println("\n\n\nCONTEXTS:");
-        System.out.println(CONTEXTS);
-        solrClient.commit();
-        solrClient.close();
     }
 
     private static void indexStructure(StructuralNode parentNode, ArrayDeque<String> titles) throws IOException, SolrServerException {
@@ -93,13 +109,6 @@ public class Indexer {
         }
 
         titles.removeLast();
-
-
-//        System.out.printf("%s%d: %s (Style: %s, ContentModel: %s, Context: %s, Class: %s)\n",
-//                "", parentNode.getLevel(),
-//                parentNode.getId(), parentNode.getStyle(), parentNode.getContentModel(), parentNode.getContext(),
-//                parentNode.getClass().getSimpleName()
-//        );
     }
 
     private static List<String> indexChildren(List<StructuralNode> nodes, ArrayDeque<String> titles) throws IOException, SolrServerException {
@@ -117,6 +126,11 @@ public class Indexer {
                 case "paragraph":
                 case "listing":
                 case "admonition":
+                case "image":
+                case "quote":
+                case "open":
+                case "sidebar":
+                case "literal":
                     Block block = (Block) node;
                     children.addAll(block.getLines());
                     break;
@@ -133,6 +147,8 @@ public class Indexer {
                     }
                     break;
                 case "ulist":
+                case "olist":
+                case "colist":
                     org.asciidoctor.ast.List list = (org.asciidoctor.ast.List) node;
                     for (StructuralNode listItemNode : list.getItems()) {
                         ListItem listItem = (ListItem) listItemNode;
@@ -147,17 +163,11 @@ public class Indexer {
                     extractCells(table.getFooter(), children);
                     break;
                 default:
-                    System.err.println("UNKNOWN CHILD NODE: " + context);
+                    System.err.printf("UNKNOWN CHILD NODE: %s (%s)\n---\n%s\n---\n",
+                            context, node.getClass().getSimpleName(), node.convert());
                     children.add(node.convert());
             }
         }
-//        //stub
-//        children.add("Content 1");
-//        children.add("Content 2");
-
-        // process various child types
-        // if child is a section, recurse
-
         return children;
     }
 
