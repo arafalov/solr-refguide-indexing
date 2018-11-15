@@ -37,14 +37,17 @@
         <analyzer type="index">
             <tokenizer class="solr.StandardTokenizerFactory"/>
             <!--
-                Use fancy negative lookahead to match CamelCase class tokens, with optional preceeding package names
-                - solr.LowerCaseFilterFactory
-                - java.util.LinkedList
-                - and without packages LinkedList
-                - but not java.util.List (too simple for our use-case)
+                Use fancy negative lookahead to match PascalCase class tokens, with optional preceding package names
+                - solr.LowerCaseFilterFactory (signal: compulsory leading package and First upper character)
+                - java.util.List
+                - and without packages LinkedList (signal: optional leading package and PascalCase)
+                - but not List (would match too many random words)
                 And then we remove leading package names (if any), leaving only the class name itself.
              -->
-            <filter class="solr.PatternReplaceFilterFactory" pattern="^(?!(\w+\.)*([A-Z]\w+){2,}$).*$" replacement=""/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^(\w+\.)+[A-Z]\w+$" replacement="#KEEP#$0"/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^(\w+\.)*[A-Z]\w+[A-Z]\w+[a-z0-9]$" replacement="#KEEP#$0"/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^(?!#KEEP#).*$" replacement=""/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^#KEEP#" replacement=""/>
             <filter class="solr.PatternReplaceFilterFactory" pattern="^(\w+\.)*" replacement=""/>
             <filter class="solr.LengthFilterFactory" min="4" max="30"/>
             <filter class="solr.LowerCaseFilterFactory"/>
