@@ -18,17 +18,8 @@
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" docValues="true"/>
 
     <fieldType name="text_basic" class="solr.SortableTextField" positionIncrementGap="100">
-        <analyzer type="index">
+        <analyzer>
             <tokenizer class="solr.StandardTokenizerFactory"/>
-            <filter class="solr.WordDelimiterGraphFilterFactory" preserveOriginal="1" generateWordParts="1"
-                    generateNumberParts="0" splitOnCaseChange="0" splitOnNumerics="0"/>
-            <filter class="solr.FlattenGraphFilterFactory"/>
-            <filter class="solr.LowerCaseFilterFactory"/>
-        </analyzer>
-        <analyzer type="query">
-            <tokenizer class="solr.StandardTokenizerFactory"/>
-            <filter class="solr.WordDelimiterGraphFilterFactory" preserveOriginal="1" generateWordParts="1"
-                    generateNumberParts="0" splitOnCaseChange="1" splitOnNumerics="0"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
@@ -49,7 +40,7 @@
             <filter class="solr.PatternReplaceFilterFactory" pattern="^(?!#KEEP#).*$" replacement=""/>
             <filter class="solr.PatternReplaceFilterFactory" pattern="^#KEEP#" replacement=""/>
             <filter class="solr.PatternReplaceFilterFactory" pattern="^(\w+\.)*" replacement=""/>
-            <filter class="solr.LengthFilterFactory" min="4" max="30"/>
+            <filter class="solr.LengthFilterFactory" min="4" max="60"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
         <analyzer type="query">
