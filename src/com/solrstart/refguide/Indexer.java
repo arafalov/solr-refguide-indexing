@@ -141,7 +141,14 @@ public class Indexer {
                             for (ListItem term : entry.getTerms()) {
                                 children.add(term.getSource());
                             }
-                            children.add(entry.getDescription().getSource());
+                            ListItem desc = entry.getDescription();
+                            String content = desc.getSource();
+                            if (content != null) {
+                                children.add(content);
+                            } else {
+                                List<String> nestedChildren = indexChildren(desc.getBlocks(), titles);
+                                children.addAll(nestedChildren);
+                            }
                         }
 
                     }
