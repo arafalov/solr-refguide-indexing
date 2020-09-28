@@ -1,0 +1,32 @@
+<component name="libraryTable">
+  <library name="org.asciidoctor:asciidoctorj:2.4.1" type="repository">
+    <properties maven-id="org.asciidoctor:asciidoctorj:2.4.1" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/asciidoctor/asciidoctorj/2.4.1/asciidoctorj-2.4.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/asciidoctor/asciidoctorj-api/2.4.1/asciidoctorj-api-2.4.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jruby/jruby/9.2.13.0/jruby-9.2.13.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jruby/jruby-core/9.2.13.0/jruby-core-9.2.13.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jnr/jnr-netdb/1.1.6/jnr-netdb-1.1.6.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jnr/jnr-enxio/0.25/jnr-enxio-0.25.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jnr/jnr-unixsocket/0.28/jnr-unixsocket-0.28.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jnr/jnr-posix/3.0.54/jnr-posix-3.0.54.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jnr/jnr-constants/0.9.15/jnr-constants-0.9.15.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jnr/jffi/1.2.23/jffi-1.2.23.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jnr/jffi/1.2.23/jffi-1.2.23-native.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jruby/joni/joni/2.1.31/joni-2.1.31.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jruby/jcodings/jcodings/1.0.46/jcodings-1.0.46.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jruby/dirgra/0.3/dirgra-0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/headius/invokebinder/1.11/invokebinder-1.11.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/headius/options/1.4/options-1.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/jcraft/jzlib/1.1.3/jzlib-1.1.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/martiansoftware/nailgun-server/0.9.1/nailgun-server-0.9.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/joda-time/joda-time/2.10.5/joda-time-2.10.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/headius/backport9/1.8/backport9-1.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/javax/annotation/javax.annotation-api/1.3.1/javax.annotation-api-1.3.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jruby/jruby-stdlib/9.2.13.0/jruby-stdlib-9.2.13.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/beust/jcommander/1.72/jcommander-1.72.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -4,5 +4,11 @@
     "echoParams":"all",
     "defType": "edismax",
     "qf": "title^20 classnames^10 text^5 path^3"
-}}}
+},
+  "GUIDESEARCH": {
+    "defType": "edismax",
+    "qf": "title^20 classnames^10 text^5 path^3 fileName anchor",
+    "fl": "id fileName anchor path title"
+  }
+}}
 

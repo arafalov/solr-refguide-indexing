@@ -1,0 +1,39 @@
+<component name="libraryTable">
+  <library name="org.apache.solr:solr-solrj:8.6.2" type="repository">
+    <properties maven-id="org.apache.solr:solr-solrj:8.6.2" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/solr/solr-solrj/8.6.2/solr-solrj-8.6.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/2.6/commons-io-2.6.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-buffer/4.1.47.Final/netty-buffer-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-codec/4.1.47.Final/netty-codec-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-common/4.1.47.Final/netty-common-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-handler/4.1.47.Final/netty-handler-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-resolver/4.1.47.Final/netty-resolver-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-transport/4.1.47.Final/netty-transport-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-transport-native-epoll/4.1.47.Final/netty-transport-native-epoll-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/netty/netty-transport-native-unix-common/4.1.47.Final/netty-transport-native-unix-common-4.1.47.Final.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.5.10/httpclient-4.5.10.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.4.12/httpcore-4.4.12.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpmime/4.5.10/httpmime-4.5.10.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/zookeeper/zookeeper/3.5.7/zookeeper-3.5.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/zookeeper/zookeeper-jute/3.5.7/zookeeper-jute-3.5.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/woodstox/woodstox-core-asl/4.4.1/woodstox-core-asl-4.4.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-alpn-client/9.4.27.v20200227/jetty-alpn-client-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-alpn-java-client/9.4.27.v20200227/jetty-alpn-java-client-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-client/9.4.27.v20200227/jetty-client-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-http/9.4.27.v20200227/jetty-http-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-io/9.4.27.v20200227/jetty-io-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-util/9.4.27.v20200227/jetty-util-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/http2/http2-client/9.4.27.v20200227/http2-client-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/http2/http2-common/9.4.27.v20200227/http2-common-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/http2/http2-hpack/9.4.27.v20200227/http2-hpack-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/http2/http2-http-client-transport/9.4.27.v20200227/http2-http-client-transport-9.4.27.v20200227.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/jcl-over-slf4j/1.7.24/jcl-over-slf4j-1.7.24.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.24/slf4j-api-1.7.24.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

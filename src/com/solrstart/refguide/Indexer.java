@@ -81,7 +81,7 @@ public class Indexer {
             case "section":
                 Section section = (Section) parentNode;
                 titles.addLast(section.getTitle());
-                anchor = section.getId();
+                anchor = denormaliseAnchor(section.getId());
                 break;
             default:
                 System.err.println("Unknown parent node: " + context);
@@ -94,6 +94,7 @@ public class Indexer {
         if (children != null) {
             SolrInputDocument doc = new SolrInputDocument();
             doc.addField("id", fileName + ':' + anchor);
+            doc.addField("fileName", fileName.replace(".adoc", ""));
             if (anchor != null) { doc.addField("anchor", anchor); }
             doc.addField("path", String.join(" >> ", titles));
             doc.addField("title", titles.getLast()); //for better matching
@@ -109,6 +110,17 @@ public class Indexer {
         }
 
         titles.removeLast();
+    }
+
+    /**
+      Somehow, asciidoc converts #foo-bar-bla into _foo_bar_bla
+      and there does not seem an easy way to get it back.
+      So, we are just going to reverse-hack it
+     **/
+    private static String denormaliseAnchor(String anchor) {
+        if (anchor.charAt(0) != '_') { return anchor; } // oops
+
+        return "#" + anchor.substring(1).replace('_', '-');
     }
 
     private static List<String> indexChildren(List<StructuralNode> nodes, ArrayDeque<String> titles) throws IOException, SolrServerException {
