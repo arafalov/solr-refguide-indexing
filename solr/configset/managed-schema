@@ -2,9 +2,22 @@
 <schema name="smallest-config" version="1.6">
 
     <field name="id" type="string" required="true" indexed="true" stored="true" />
+
+    <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
+    <fieldType name="_nest_path_" class="solr.NestPathField" />
+    <field name="_nest_path_" type="_nest_path_" />
+    <field name="_nest_parent_" type="string" indexed="true" stored="true"/>
+
     <field name="_text_" type="text_basic" multiValued="true" indexed="true" stored="false" docValues="false"/>
     <field name="text" type="text_basic" multiValued="true" indexed="true" stored="true"/>
     <field name="hasText" type="boolean" indexed="true" stored="true"/>
+    <field name="isDocumentRoot" type="boolean" indexed="true" stored="true"/>
+    <field name="level" type="pint" indexed="false" stored="true"/>
+    <field name="_version_" type="plong" indexed="false" stored="false"/>
+    <field name="path" type="text_basic" indexed="true" stored="true" multiValued="true"/>
+    <field name="fileName" type="string" indexed="false" stored="true" docValues="true"/>
+    <field name="anchor" type="string" indexed="false" stored="true"/>
+    <field name="childenCount" type="pint" indexed="true" stored="true"/>
 
     <field name="classnames" multiValued="true" type="text_classname" indexed="true" stored="false"/>
     <copyField source="text" dest="classnames"/>
@@ -15,7 +28,10 @@
 
     <uniqueKey>id</uniqueKey>
 
+
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" docValues="true"/>
+    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
 
     <fieldType name="text_basic" class="solr.SortableTextField" positionIncrementGap="100">
         <analyzer>

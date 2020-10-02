@@ -16,16 +16,17 @@ import java.util.List;
 
 public class Indexer {
 
+    public static final String FIELD_CHILDREN = "children";
     private static TreeSet<String> CONTEXTS = new TreeSet<>();
-    private static ConcurrentUpdateSolrClient solrClient;
     private static Asciidoctor asciidoctor;
     private static String fileName;
     private static Map<String, Object> options = options().asMap();
+    private static int totalDocs = 0;
 
     public static void main(String[] args) throws IOException, SolrServerException {
         asciidoctor = Asciidoctor.Factory.create();
 
-
+        ConcurrentUpdateSolrClient solrClient;
         solrClient = new ConcurrentUpdateSolrClient.Builder("http://localhost:8983/solr/refguide").build();
         solrClient.deleteByQuery("*:*");
         solrClient.commit();
@@ -38,44 +39,59 @@ public class Indexer {
                 System.out.println("Indexing directory: " + fileOrDir.getAbsolutePath());
                 for (File file : fileOrDir.listFiles((dir, name) -> name.endsWith(".adoc"))) {
                     System.out.println("    Indexing: " + file.getAbsolutePath());
-                    indexFile(file);
+                    indexFile(solrClient, file);
                     totalFilesIndexed++;
                 }
             } else {
                 System.out.println("Indexing: " + fileOrDir.getAbsolutePath());
-                indexFile(fileOrDir);
+                indexFile(solrClient, fileOrDir);
                 totalFilesIndexed++;
             }
         }
 
-
-
-//        System.out.println("\n\n\nCONTEXTS:");
-//        System.out.println(CONTEXTS);
         solrClient.commit();
         solrClient.close();
 
-        System.out.println("\n\nTotal files indexed: " + totalFilesIndexed);
+        System.out.printf("\n\nTotal files indexed: %d, including %d documents\n", totalFilesIndexed, totalDocs);
     }
 
-    private static void indexFile(File file) throws IOException, SolrServerException {
+    private static void indexFile(ConcurrentUpdateSolrClient solrClient, File file) throws IOException, SolrServerException {
         fileName = file.getName();
+        fileName = fileName.substring(0, fileName.lastIndexOf('.')); //strip extension
         Document document = asciidoctor.loadFile(file, options);
+
+        //Create root Solr document, into which everything else goes
+        //This is mostly because "document" may or may not have text, depending on whether it detects a preamble
+        //https://asciidoctor.org/docs/user-manual/#doc-preamble (no lvl1 section => no preamble either, just root text)
+
+        SolrInputDocument rootDoc = createSolrInputDocumentWithChildren(null, fileName, fileName, document.getDoctitle());
+        rootDoc.setField("isDocumentRoot", true);
 
         ArrayDeque<String> titles = new ArrayDeque<>();
 
-        indexStructure(document, titles);
+        indexStructure(document, titles, rootDoc);
+        setChildenCount(rootDoc);
+        UpdateResponse add = solrClient.add(rootDoc);
     }
 
-    private static void indexStructure(StructuralNode parentNode, ArrayDeque<String> titles) throws IOException, SolrServerException {
+    private static void indexStructure(StructuralNode parentNode, ArrayDeque<String> titles, SolrInputDocument parentSolrDoc)
+            throws IOException, SolrServerException {
+        String id = null;
         String anchor = null;
         String context = parentNode.getContext();
+
+        //We don't want to go one level deeper after this element
+        boolean isDocEntry = false;
+
         switch (context) {
             case "document":
+                isDocEntry = true;
+                id = makeID("##DOC");
                 Document doc = (Document) parentNode;
                 titles.addLast(doc.getDoctitle());
                 break;
             case "preamble":
+                id = makeID("##PREAMBLE");
                 titles.addLast("Preamble");
                 break;
             case "section":
@@ -87,43 +103,38 @@ public class Indexer {
                 System.err.println("Unknown parent node: " + context);
         }
 
+        if (id == null) {
+            id = makeID(anchor);
+        }
+
         System.out.println("Looking at: "  + String.join(" >> ", titles));
 
-        List<String> children = indexChildren(parentNode.getBlocks(), titles);
-
-        if (children != null) {
-            SolrInputDocument doc = new SolrInputDocument();
-            doc.addField("id", fileName + ':' + anchor);
-            doc.addField("fileName", fileName.replace(".adoc", ""));
-            if (anchor != null) { doc.addField("anchor", anchor); }
-            doc.addField("path", String.join(" >> ", titles));
-            doc.addField("title", titles.getLast()); //for better matching
-            doc.addField("level", parentNode.getLevel());
-            if (children.size() == 0) {
-                doc.addField("hasText", false);
-            } else {
-                doc.addField("hasText", true);
-                doc.addField("text", children);
-            }
-            UpdateResponse add = solrClient.add(doc);
-
+        SolrInputDocument doc = createSolrInputDocumentWithChildren(parentSolrDoc, id, fileName, titles.getLast());
+        if (anchor != null) {
+            doc.addField("anchor", anchor);
         }
+        doc.addField("path", titles.toArray());
+        doc.addField("level", parentNode.getLevel());
+
+        List<String> extractedText = indexChildren(parentNode.getBlocks(), titles, isDocEntry?parentSolrDoc:doc);
+        if (extractedText == null || extractedText.size() == 0) {
+            doc.addField("hasText", false);
+        } else {
+            doc.addField("hasText", true);
+            doc.addField("text", extractedText);
+        }
+
+        setChildenCount(doc);
 
         titles.removeLast();
     }
 
-    /**
-      Somehow, asciidoc converts #foo-bar-bla into _foo_bar_bla
-      and there does not seem an easy way to get it back.
-      So, we are just going to reverse-hack it
-     **/
-    private static String denormaliseAnchor(String anchor) {
-        if (anchor.charAt(0) != '_') { return anchor; } // oops
-
-        return "#" + anchor.substring(1).replace('_', '-');
+    private static String makeID(String anchor) {
+        return fileName + ':' + anchor;
     }
 
-    private static List<String> indexChildren(List<StructuralNode> nodes, ArrayDeque<String> titles) throws IOException, SolrServerException {
+    private static List<String> indexChildren(List<StructuralNode> nodes, ArrayDeque<String> titles, SolrInputDocument parentSolrDoc)
+            throws IOException, SolrServerException {
         if (nodes == null || nodes.isEmpty()) { return null; }
 
         List<String> children = new ArrayList<>();
@@ -133,7 +144,7 @@ public class Indexer {
             switch (context) {
                 case "section":
                 case "preamble":
-                    indexStructure(node, titles);
+                    indexStructure(node, titles, parentSolrDoc);
                     break;
                 case "paragraph":
                 case "listing":
@@ -158,7 +169,7 @@ public class Indexer {
                             if (content != null) {
                                 children.add(content);
                             } else {
-                                List<String> nestedChildren = indexChildren(desc.getBlocks(), titles);
+                                List<String> nestedChildren = indexChildren(desc.getBlocks(), titles, parentSolrDoc);
                                 children.addAll(nestedChildren);
                             }
                         }
@@ -188,6 +199,37 @@ public class Indexer {
             }
         }
         return children;
+    }
+
+    private static SolrInputDocument createSolrInputDocumentWithChildren(SolrInputDocument parent, String id, String fileName, String title) {
+        SolrInputDocument doc = new SolrInputDocument();
+        doc.setField("id", id);
+        doc.setField("fileName", fileName);
+        doc.setField("title", title);
+
+        doc.setField(FIELD_CHILDREN, new ArrayList<SolrInputDocument>());
+
+        if (parent != null) {
+            parent.getField(FIELD_CHILDREN).addValue(doc);
+        }
+
+        totalDocs++;
+        return doc;
+    }
+
+    private static void setChildenCount(SolrInputDocument doc) {
+        doc.setField("childrenCount", doc.getFieldValues(FIELD_CHILDREN).size());
+    }
+
+    /**
+     Somehow, asciidoc converts #foo-bar-bla into _foo_bar_bla
+     and there does not seem an easy way to get it back.
+     So, we are just going to reverse-hack it
+     **/
+    private static String denormaliseAnchor(String anchor) {
+        if (anchor.charAt(0) != '_') { return anchor; } // oops
+
+        return "#" + anchor.substring(1).replace('_', '-');
     }
 
     private static void extractCells(List<Row> rows, List<String> children) {

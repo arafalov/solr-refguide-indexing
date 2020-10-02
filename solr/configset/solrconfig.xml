@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
-    <luceneMatchVersion>9.0.0</luceneMatchVersion>
+    <luceneMatchVersion>8.5.0</luceneMatchVersion>
     <requestHandler name="/select" class="solr.SearchHandler" useParams="SELECT" />
-    <requestHandler name="/guidesearch" class="solr.SearchHandler" useParams="GUIDESEARCH" />
+
+    <requestHandler name="/guidesearch" class="solr.SearchHandler" useParams="NOTUIDESEARCH">
+        <lst name="invariants">
+            <str name="q">{!parent which="isDocumentRoot:true" v=$term}</str>
+            <str name="fl">*,[child  childFilter=$term]</str>
+            <str name="df">_text_</str>
+        </lst>
+    </requestHandler>
 </config>
