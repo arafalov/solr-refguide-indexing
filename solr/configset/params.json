@@ -1,7 +1,7 @@
 {"params":{
   "SELECT":{
     "df":"_text_",
-    "echoParams":"all"®
+    "echoParams":"all"
 },
   "GUIDESEARCH": {
     "defType": "edismax",
