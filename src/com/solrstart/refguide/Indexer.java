@@ -154,9 +154,26 @@ public class Indexer {
                 case "open":
                 case "sidebar":
                 case "literal":
+                case "example":
+                case "pass":
+                case "thematic_break":
                     Block block = (Block) node;
-                    children.addAll(block.getLines());
+                    int contentLinesCount = indexContentNode(children, block);
+                    if (contentLinesCount == 0) {
+                        switch (block.getContentModel()) {
+                            case "empty":
+                                break;
+                            case "compound":
+                                List<String> nestedChildren = indexChildren(block.getBlocks(), titles, parentSolrDoc);
+                                children.addAll(nestedChildren);
+                                break;
+                            default:
+                                System.err.println("UNRECOGNIZED CONTENT MODEL WITH EMPTY TEXT: " + context);
+                                break;
+                        }
+                    }
                     break;
+
                 case "dlist":
                     DescriptionList dlist = (DescriptionList) node;
                     if (dlist.hasItems()) {
@@ -199,6 +216,25 @@ public class Indexer {
             }
         }
         return children;
+    }
+
+    /**
+     * Index captions, titles and text lines (if any of 3 exist)
+     * @return number of text lines indexed (zero is special case)
+     */
+    private static int indexContentNode(List<String> children, Block block) {
+        String blockCaption = block.getCaption();
+        if (blockCaption != null) {
+            children.add(blockCaption);
+        }
+        String blockTitle = block.getTitle();
+        if (blockTitle != null) {
+            children.add(blockTitle);
+        }
+
+        List<String> lines = block.getLines();
+        children.addAll(lines);
+        return lines.size();
     }
 
     private static SolrInputDocument createSolrInputDocumentWithChildren(SolrInputDocument parent, String id, String fileName, String title) {
