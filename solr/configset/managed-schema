@@ -2,6 +2,7 @@
 <schema name="smallest-config" version="1.6">
 
     <field name="id" type="string" required="true" indexed="true" stored="true" />
+    <field name="_version_" type="plong" indexed="false" stored="false"/>
 
     <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
     <fieldType name="_nest_path_" class="solr.NestPathField" />
@@ -13,8 +14,7 @@
     <field name="hasText" type="boolean" indexed="true" stored="true"/>
     <field name="isDocumentRoot" type="boolean" indexed="true" stored="true"/>
     <field name="level" type="pint" indexed="false" stored="true"/>
-    <field name="_version_" type="plong" indexed="false" stored="false"/>
-    <field name="path" type="text_basic" indexed="true" stored="true" multiValued="true"/>
+    <field name="path" type="text_unbroken" indexed="true" stored="true" multiValued="true"/>
     <field name="fileName" type="string" indexed="false" stored="true" docValues="true"/>
     <field name="anchor" type="string" indexed="false" stored="true"/>
     <field name="childenCount" type="pint" indexed="true" stored="true"/>
@@ -33,12 +33,29 @@
     <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
     <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
 
-    <fieldType name="text_basic" class="solr.SortableTextField" positionIncrementGap="100">
+    <fieldType name="text_basic" class="solr.TextField" positionIncrementGap="100">
         <analyzer>
             <tokenizer class="solr.StandardTokenizerFactory"/>
             <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.EnglishPossessiveFilterFactory"/>
+            <filter class="solr.EnglishMinimalStemFilterFactory"/>
         </analyzer>
     </fieldType>
+
+    <!--
+        Recognize that multi-valued fields here are actually related and allow them to be joined
+         with a small enough slop/distance
+     -->
+    <fieldType name="text_unbroken" class="solr.TextField" positionIncrementGap="3">
+        <analyzer>
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.EnglishPossessiveFilterFactory"/>
+            <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+
 
     <fieldType name="text_classname" class="solr.TextField" positionIncrementGap="100">
         <analyzer type="index">

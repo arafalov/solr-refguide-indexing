@@ -1,0 +1,149 @@
+{
+  "responseHeader":{
+    "status":0,
+    "QTime":4},
+  "grouped":{
+    "fileName":{
+      "matches":22,
+      "groups":[{
+          "groupValue":"solr-control-script-reference",
+          "doclist":{"numFound":3,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"solr-control-script-reference:#delete-core-or-collection",
+                "fileName":"solr-control-script-reference",
+                "title":"Delete Core or Collection",
+                "anchor":"#delete-core-or-collection",
+                "path":["Solr Control Script Reference",
+                  "Collections and Cores",
+                  "Delete Core or Collection"]},
+              {
+                "id":"solr-control-script-reference:#delete-core-or-collection-parameters",
+                "fileName":"solr-control-script-reference",
+                "title":"Delete Core or Collection Parameters",
+                "anchor":"#delete-core-or-collection-parameters",
+                "path":["Solr Control Script Reference",
+                  "Collections and Cores",
+                  "Delete Core or Collection",
+                  "Delete Core or Collection Parameters"]}]
+          }},
+        {
+          "groupValue":"installing-solr",
+          "doclist":{"numFound":1,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"installing-solr:#starting-solr",
+                "fileName":"installing-solr",
+                "title":"Starting Solr",
+                "anchor":"#starting-solr",
+                "path":["Installing Solr",
+                  "Starting Solr"]}]
+          }},
+        {
+          "groupValue":"post-tool",
+          "doclist":{"numFound":2,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"post-tool:##PREAMBLE",
+                "fileName":"post-tool",
+                "title":"Preamble",
+                "path":["Post Tool",
+                  "Preamble"]},
+              {
+                "id":"post-tool:#post-tool-windows-support",
+                "fileName":"post-tool",
+                "title":"Post Tool Windows Support",
+                "anchor":"#post-tool-windows-support",
+                "path":["Post Tool",
+                  "Post Tool Windows Support"]}]
+          }},
+        {
+          "groupValue":"solr-tutorial",
+          "doclist":{"numFound":2,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"solr-tutorial:#exercise-2-wrap-up",
+                "fileName":"solr-tutorial",
+                "title":"Exercise 2 Wrap Up",
+                "anchor":"#exercise-2-wrap-up",
+                "path":["Solr Tutorial",
+                  "Exercise 2: Modify the Schema and Index Films Data",
+                  "Exercise 2 Wrap Up"]},
+              {
+                "id":"solr-tutorial:#launch-solr-in-solrcloud-mode",
+                "fileName":"solr-tutorial",
+                "title":"Launch Solr in SolrCloud Mode",
+                "anchor":"#launch-solr-in-solrcloud-mode",
+                "path":["Solr Tutorial",
+                  "Exercise 1: Index Techproducts Example Data",
+                  "Launch Solr in SolrCloud Mode"]}]
+          }},
+        {
+          "groupValue":"making-and-restoring-backups",
+          "doclist":{"numFound":1,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"making-and-restoring-backups:#delete-snapshot-api",
+                "fileName":"making-and-restoring-backups",
+                "title":"Delete Snapshot API",
+                "anchor":"#delete-snapshot-api",
+                "path":["Making and Restoring Backups",
+                  "Standalone Mode Backups",
+                  "Delete Snapshot API"]}]
+          }},
+        {
+          "groupValue":"collection-management",
+          "doclist":{"numFound":2,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"collection-management:#delete-response",
+                "fileName":"collection-management",
+                "title":"DELETE Response",
+                "anchor":"#delete-response",
+                "path":["Collection Management Commands",
+                  "DELETE: Delete a Collection",
+                  "DELETE Response"]},
+              {
+                "id":"collection-management:#examples-using-colstatus",
+                "fileName":"collection-management",
+                "title":"Examples using COLSTATUS",
+                "anchor":"#examples-using-colstatus",
+                "path":["Collection Management Commands",
+                  "COLSTATUS: Detailed Status of a Collection&#8217;s Indexes",
+                  "Examples using COLSTATUS"]}]
+          }},
+        {
+          "groupValue":"indexupgrader-tool",
+          "doclist":{"numFound":1,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"indexupgrader-tool:##DOC",
+                "fileName":"indexupgrader-tool",
+                "title":"IndexUpgraderTool",
+                "path":["IndexUpgraderTool"]}]
+          }},
+        {
+          "groupValue":"replica-management",
+          "doclist":{"numFound":1,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"replica-management:deletereplica",
+                "fileName":"replica-management",
+                "title":"DELETEREPLICA: Delete a Replica",
+                "anchor":"deletereplica",
+                "path":["Replica Management Commands",
+                  "DELETEREPLICA: Delete a Replica"]}]
+          }},
+        {
+          "groupValue":"index",
+          "doclist":{"numFound":1,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"index:##DOC",
+                "fileName":"index",
+                "title":"Apache Solr Reference Guide",
+                "path":["Apache Solr Reference Guide"]}]
+          }},
+        {
+          "groupValue":"solr-upgrade-notes",
+          "doclist":{"numFound":1,"start":0,"numFoundExact":true,"docs":[
+              {
+                "id":"solr-upgrade-notes:#solr-8-5",
+                "fileName":"solr-upgrade-notes",
+                "title":"Solr 8.5",
+                "anchor":"#solr-8-5",
+                "path":["Solr Upgrade Notes",
+                  "Upgrading to 8.x Releases",
+                  "Solr 8.5"]}]
+          }}]}}}

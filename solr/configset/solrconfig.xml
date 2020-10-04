@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
     <luceneMatchVersion>8.5.0</luceneMatchVersion>
-    <requestHandler name="/select" class="solr.SearchHandler" useParams="SELECT" />
+    <requestHandler name="/select" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="df">_text_</str>
+            <str name="echoParams">all</str>
+        </lst>
+    </requestHandler>
 
     <requestHandler name="/guidesearch" class="solr.SearchHandler" useParams="NOTUIDESEARCH">
+        <lst name="defaults">
+            <str name="fl">id,fileName,anchor,title,path</str> <!-- can override in debugging -->
+        </lst>
         <lst name="invariants">
-            <str name="q">{!parent which="isDocumentRoot:true" v=$term}</str>
-            <str name="fl">*,[child  childFilter=$term]</str>
-            <str name="df">_text_</str>
+            <str name="fq">-isDocumentRoot:true</str> <!-- just return inner documents to avoid double/triple matches -->
+            <str name="defType">edismax</str> <!-- for advanced field and phrase searching -->
+            <str name="uf">-*</str> <!-- no fielded searches, no sub-queries for the user -->
+            <str name="mm">3&lt;75%</str> <!-- first 3 terms are required, if more given, then try to match most -->
+            <str name="qf">title^10 path^5 text classnames</str> <!-- baseline search -->
+
+            <!-- if the whole thing matches title (or path) with some slop, this is a direct lookup basically -->
+            <str name="pf">title^500 path^100</str>
+            <str name="ps">5</str>
+
+            <!-- If direct matches don't hit, try phrases, 3-term is better than 2, same slop as phrase search -->
+            <str name="pf2">title^200 path^100 text^20</str>
+            <str name="pf3">title^300 path^150 text^30</str>
+
+            <!-- Tie in case we have a strong match in titles, but one has a body with additional terms -->
+            <str name="tie">0.3</str>
+
+            <!-- return results grouped by file name and 2 entries per file -->
+            <str name="group">true</str>
+            <str name="group.field">fileName</str>
+            <str name="group.limit">2</str>
         </lst>
     </requestHandler>
 </config>
